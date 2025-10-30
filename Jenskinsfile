@@ -1,32 +1,28 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Checkout') {
-            steps {
-                echo "Code checkout simulated"
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                echo "Installing dependencies..."
-                sh 'echo Installing packages...'
-            }
-        }
-
-        stage('Build and Test') {
-            steps {
-                echo "Running build and tests..."
-                sh 'echo Running tests...'
-            }
-        }
-
-        stage('Archive Artifact') {
-            steps {
-                echo "Archiving artifacts..."
-                sh 'echo Saving build files...'
-            }
-        }
+  agent any
+  stages {
+    stage('Checkout') {
+      steps { checkout scm }
     }
+    stage('Build & Test') {
+      steps {
+        script {
+          if (isUnix()) {
+            sh 'mvn -B clean test'
+            sh 'mvn -B package'
+          } else {
+            bat 'mvn -B clean test'
+            bat 'mvn -B package'
+          }
+        }
+      }
+    }
+    stage('Archive') {
+      steps {
+        junit 'target/surefire-reports/*.xml'
+        archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+      }
+    }
+  }
+
 }
