@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo "Code checkout simulated"
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo "Installing dependencies..."
+                sh 'echo Installing packages...'
+            }
+        }
+
+        stage('Build and Test') {
+            steps {
+                echo "Running build and tests..."
+                sh 'echo Running tests...'
+            }
+        }
+
+        stage('Archive Artifact') {
+            steps {
+                echo "Archiving artifacts..."
+                sh 'echo Saving build files...'
+            }
+        }
+    }
+}
