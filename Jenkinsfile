@@ -11,7 +11,7 @@ pipeline {
         }
 
         stage('Run on Windows Agent') {
-            agent { label 'intprac' }   // Runs on agent with label "intprac"
+            agent { label 'pilli' }   // Runs on agent with label "intprac"
             steps {
                 bat """
                     echo Running on Windows Agent
@@ -30,7 +30,7 @@ pipeline {
                     }
                 }
                 stage('Windows Agent') {
-                    agent { label 'intprac' }
+                    agent { label 'pilli' }
                     steps {
                         bat "echo Parallel on Windows Agent: %NODE_NAME%"
                     }
