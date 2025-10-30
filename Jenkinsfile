@@ -1,24 +1,23 @@
 pipeline {
-    agent none
+    agent none   // No global agent — each stage defines its own agent
 
     stages {
+
         stage('Run on Controller') {
-            agent { label 'built-in' }
+            agent { label 'built-in' }   // Runs on Jenkins controller
             steps {
-                echo "Running on: built-in"
+                echo "Running on: ${env.NODE_NAME}" // Prints node name
             }
         }
 
         stage('Run on Windows Agent') {
-            agent { label 'Tejaswini' }
+            agent { label 'intprac' }   // Runs on agent with label "intprac"
             steps {
-                echo "Running on Windows Agent"
-                bat '''
+                bat """
                     echo Running on Windows Agent
-                    mkdir out
-                    javac -d out src\\HelloWorld.java
+                    javac -d out HelloWorld.java
                     java -cp out HelloWorld
-                '''
+                """
             }
         }
 
@@ -27,13 +26,13 @@ pipeline {
                 stage('Controller') {
                     agent { label 'built-in' }
                     steps {
-                        echo "Controller Stage"
+                        echo "Parallel on Controller: ${env.NODE_NAME}"
                     }
                 }
                 stage('Windows Agent') {
-                    agent { label 'Tejaswini' }
+                    agent { label 'intprac' }
                     steps {
-                        echo "Windows Agent Stage"
+                        bat "echo Parallel on Windows Agent: %NODE_NAME%"
                     }
                 }
             }
